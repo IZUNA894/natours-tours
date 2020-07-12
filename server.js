@@ -22,9 +22,9 @@ process.on("unhandledRejection", err => {
 });
 
 //for heroku...as its give SIGTERM signal...
-process.on('SIGTERM',,() => {
+process.on("SIGTERM", () => {
   console.log("Exiting........ as SIGTERM recieved");
   server.close(() => {
-    console.log('server closed as from SIGTERM')
-  })
-})
+    console.log("server closed as from SIGTERM");
+  });
+});

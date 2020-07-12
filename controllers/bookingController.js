@@ -41,14 +41,18 @@ module.exports.getCheckoutSession = catchAsync(async (req, res, next) => {
 
 //creating booking check out ,called by below function only
 const createBookingCheckout = async session => {
+  console.log("createBooking called");
   const tour = session.client_reference_id;
   const user = (await User.findOne({ email: session.customer_email })).id;
   const price = session.line_items[0].amount / 100;
-  await Booking.create({ tour, user, price });
+  // await Booking.create({ tour, user, price });
 };
 //creating a checkout (prduction),will called by stripe servers. not by  our app
 module.exports.webhookCheckout = (req, res, next) => {
   const signature = req.headers["stripe-signature"];
+  console.log("function called");
+  console.log(signature);
+  if (!signature) return next();
   let event;
   try {
     event = stripe.webhooks.constructEvent(
@@ -59,22 +63,25 @@ module.exports.webhookCheckout = (req, res, next) => {
   } catch (err) {
     return res.status(400).send(`Webhook error :${err.message}`);
   }
-
-  if (event.type === "checkout.session.completed")
+  console.log("event ", event.type);
+  if (event.type === "checkout.session.completed") {
+    console.log("hello");
     createBookingCheckout(event.data.object);
+  }
 
   res.status(200).json({ received: true });
 };
 
 //creating a booking,when data is send through query string
 //! this will be called from view router,when after successful payment,user is redirected to home page
-module.exports.createBooking = catchAsync(async function(req, res, next) {
-  const { tourId, userId, price } = req.query;
-  if (!tourId || !userId || !price) return next();
+//used in developement only,not in production
+// module.exports.createBooking = catchAsync(async function(req, res, next) {
+//   const { tourId, userId, price } = req.query;
+//   if (!tourId || !userId || !price) return next();
 
-  await Booking.create({ tour: tourId, user: userId, price });
-  res.redirect(req.originalUrl.split("?")[0]);
-});
+//   await Booking.create({ tour: tourId, user: userId, price });
+//   res.redirect(req.originalUrl.split("?")[0]);
+// });
 
 //getting all Tours
 module.exports.getAllBookings = catchAsync(async (req, res, next) => {

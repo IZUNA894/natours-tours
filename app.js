@@ -35,10 +35,13 @@ app.use(express.static(`${__dirname}/public`));
 //for logging req
 app.use(morgan("dev"));
 //integrating stripe checkout,have to before json parser
-app.post(
+app.get(
   "/webhook-checkout",
-  express.raw({ type: "application/json" }),
-  bookingController.webhookCheckout
+  // express.raw({ type: "application/json" }),
+  // bookingController.webhookCheckout
+  (req, res) => {
+    console.log("e");
+  }
 );
 //for parsing json into req.body
 app.use(express.json({ limit: "10kb" }));
