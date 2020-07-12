@@ -6590,7 +6590,7 @@ var displayMap = function displayMap(locations) {
   mapboxgl.accessToken = "pk.eyJ1IjoiaXp1bmEtODk0IiwiYSI6ImNqemVnNXlmMTAyMXUzbXQ2MzQ3cWlpYXgifQ.5J-jQfhtF71FNHw4YjK-9Q";
   var map = new mapboxgl.Map({
     container: "map",
-    style: "mapbox://styles/jonasschmedtmann/cjvi9q8jd04mi1cpgmg7ev3dy",
+    style: "mapbox://styles/izuna-894/ckcay60ii5ma11iqhn1sh3f6p",
     scrollZoom: false // center: [-118.113491, 34.111745],
     // zoom: 10,
     // interactive: false
@@ -8441,7 +8441,7 @@ var login = /*#__PURE__*/function () {
             _context.next = 3;
             return (0, _axios.default)({
               method: "POST",
-              url: "http://127.0.0.1:3000/api/v1/login/user",
+              url: "/api/v1/login/user",
               data: {
                 email: email,
                 password: password
@@ -8494,7 +8494,7 @@ var logout = /*#__PURE__*/function () {
             _context2.next = 3;
             return (0, _axios.default)({
               method: "GET",
-              url: "http://127.0.0.1:3000/api/v1/user/logout"
+              url: "/api/v1/user/logout"
             });
 
           case 3:
@@ -68717,6 +68717,7 @@ if (userPasswordForm) userPasswordForm.addEventListener("submit", /*#__PURE__*/f
 }());
 
 if (bookTour) {
+  console.log(bookTour);
   bookTour.addEventListener("click", function (e) {
     var tourId = e.target.dataset.tourId;
     (0, _stripe.getBooking)(tourId);
@@ -68750,7 +68751,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50991" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "63210" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
