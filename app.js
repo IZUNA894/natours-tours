@@ -35,7 +35,7 @@ app.use(express.static(`${__dirname}/public`));
 //for logging req
 app.use(morgan("dev"));
 //integrating stripe checkout,have to before json parser
-app.get(
+app.post(
   "/webhook-checkout",
   express.raw({ type: "application/json" }),
   bookingController.webhookCheckout
