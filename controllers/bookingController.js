@@ -1,18 +1,22 @@
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 const Tour = require("./../db/tourModel");
+const User = require("./../db/userModel");
 const Booking = require("./../db/bookingModel");
 const APIFeatures = require("./../utils/apiFeatures");
 const AppError = require("./../utils/appError");
 const catchAsync = require("./../utils/catchAsync");
+
 //creating a checkout session ,calling stripe for payment.
+
+//in production we will use geiven below function
 module.exports.getCheckoutSession = catchAsync(async (req, res, next) => {
   //1.get current tour
   const tour = await Tour.findById(req.params.tourId);
-
   //2.create checkout session
   const Stripe = await stripe.checkout.sessions.create({
     payment_method_types: ["card"],
-    success_url: `${req.protocol}://${req.hostname}:3000/?tourId=${tour._id}&userId=${req.user.id}&price=${tour.price}`,
+    // success_url: `${req.protocol}://${req.hostname}:3000/?tourId=${tour._id}&userId=${req.user.id}&price=${tour.price}`,  this function is used in developement only...
+    success_url: `${req.protocol}://${req.hostname}:3000/`,
     cancel_url: `${req.protocol}://${req.hostname}/tour/${tour.slug}`,
     customer_email: req.user.email,
     client_reference_id: req.params.tourId,
@@ -20,19 +24,47 @@ module.exports.getCheckoutSession = catchAsync(async (req, res, next) => {
       {
         name: `${tour.name} Tour`,
         description: tour.summary,
-        images: [`https://www.natours.dev/img/tours/${tour.imageCover}`],
+        images: [
+          `${req.protocol}://${req.hostname}/img/tours/${tour.imageCover}`
+        ],
         amount: tour.price * 100,
         currency: "usd",
         quantity: 1
       }
     ]
   });
-
   res.status(200).json({
     status: "success",
     Stripe
   });
 });
+
+//creating booking check out ,called by below function only
+const createBookingCheckout = async session => {
+  const tour = session.client_reference_id;
+  const user = (await User.findOne({ email: session.customer_email })).id;
+  const price = session.line_items[0].amount / 100;
+  await Booking.create({ tour, user, price });
+};
+//creating a checkout (prduction),will called by stripe servers. not by  our app
+module.exports.webhookCheckout = (req, res, next) => {
+  const signature = req.headers["stripe-signature"];
+  let event;
+  try {
+    event = stripe.webhooks.constructEvent(
+      req.body,
+      signature,
+      process.env.STRIPE_WEBHOOK_SECRET
+    );
+  } catch (err) {
+    return res.status(400).send(`Webhook error :${err.message}`);
+  }
+
+  if (event.type === "checkout.session.completed")
+    createBookingCheckout(event.data.object);
+
+  res.status(200).json({ received: true });
+};
 
 //creating a booking,when data is send through query string
 //! this will be called from view router,when after successful payment,user is redirected to home page

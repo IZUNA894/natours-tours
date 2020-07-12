@@ -4,7 +4,7 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "start": "nodemon server.js",
+    "start": "node server.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "./node_modules/.bin/env-cmd -f ./config/dev.env nodemon server.js",
     "prod": "./node_modules/.bin/env-cmd -f ./config/prod.env nodemon server.js",

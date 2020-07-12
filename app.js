@@ -14,6 +14,7 @@ const tourRouter = require("./routes/tourRouter");
 const userRouter = require("./routes/userRouter");
 const reviewRouter = require("./routes/reviewRouter");
 const viewRouter = require("./routes/viewRouter");
+const bookingController = require("./controllers/bookingController");
 const AppError = require("./utils/appError.js");
 const globalErrorController = require("./controllers/errorController");
 
@@ -33,6 +34,12 @@ app.use("/api", limiter);
 app.use(express.static(`${__dirname}/public`));
 //for logging req
 app.use(morgan("dev"));
+//integrating stripe checkout,have to before json parser
+app.post(
+  "/webhook-checkout",
+  express.raw({ type: "application/json" }),
+  bookingController.webhookCheckout
+);
 //for parsing json into req.body
 app.use(express.json({ limit: "10kb" }));
 //for parsing cookies
