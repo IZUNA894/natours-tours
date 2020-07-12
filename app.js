@@ -37,11 +37,8 @@ app.use(morgan("dev"));
 //integrating stripe checkout,have to before json parser
 app.get(
   "/webhook-checkout",
-  // express.raw({ type: "application/json" }),
-  // bookingController.webhookCheckout
-  (req, res) => {
-    console.log("e");
-  }
+  express.raw({ type: "application/json" }),
+  bookingController.webhookCheckout
 );
 //for parsing json into req.body
 app.use(express.json({ limit: "10kb" }));
