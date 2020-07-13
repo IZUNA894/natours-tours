@@ -70,8 +70,6 @@ userSchema.pre("save", async function(next) {
 
 //for reseting the passwordChangedAt ,when user has changed the password
 userSchema.pre("save", async function(next) {
-  console.log(this.isNew);
-
   if (!this.isModified("password") || this.isNew) return next();
 
   this.passwordChangedAt = Date.now();

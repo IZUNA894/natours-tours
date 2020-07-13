@@ -45,7 +45,6 @@ module.exports.resizeTourImages = catchAsync(async (req, res, next) => {
 
   //2.a. now ,resizing it,image cover
   req.body.imageCover = `tour-cover-${req.user.id}-${Date.now()}.jpg`;
-  console.log(req.body.imageCover);
   await sharp(req.files.imageCover[0].buffer)
     .resize(2000, 1333)
     .toFormat("jpeg")
@@ -105,7 +104,6 @@ exports.getAllTours = catchAsync(async (req, res, next) => {
 
 //creating tour
 exports.createTour = catchAsync(async (req, res, next) => {
-  console.log(req.body);
   var newTour = new Tour(req.body);
   var result = await newTour.save();
 
@@ -135,7 +133,6 @@ exports.getTourById = catchAsync(async (req, res, next) => {
 
 // updating tour by id
 exports.updateTourById = catchAsync(async (req, res, next) => {
-  console.log(req.body);
   var tours = await Tour.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
     runValidators: true
@@ -196,7 +193,6 @@ exports.getTourStats = catchAsync(async (req, res, next) => {
 //creating aggregates for months stats
 exports.getMonthsStats = catchAsync(async (req, res, next) => {
   const year = req.params.year * 1;
-  console.log(year);
   const stats = await Tour.aggregate([
     {
       $unwind: "$startDates"

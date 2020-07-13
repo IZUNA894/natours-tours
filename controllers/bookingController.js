@@ -41,7 +41,6 @@ module.exports.getCheckoutSession = catchAsync(async (req, res, next) => {
 
 //creating booking check out ,called by below function only
 const createBookingCheckout = async session => {
-  console.log("createBooking called", session);
   const tour = session.client_reference_id;
   const user = (await User.findOne({ email: session.customer_email })).id;
   const price = session.display_items[0].amount / 100;
@@ -50,7 +49,6 @@ const createBookingCheckout = async session => {
 //creating a checkout (prduction),will called by stripe servers. not by  our app
 module.exports.webhookCheckout = (req, res, next) => {
   const signature = req.headers["stripe-signature"];
-  console.log("function called");
   if (!signature) return next();
   let event;
   try {
@@ -102,7 +100,6 @@ module.exports.getAllBookings = catchAsync(async (req, res, next) => {
 
 //creating booking
 module.exports.createBooking = catchAsync(async (req, res, next) => {
-  console.log(req.body);
   var newBooking = new Booking(req.body);
   var result = await newBooking.save();
 
@@ -132,7 +129,6 @@ module.exports.getBookingById = catchAsync(async (req, res, next) => {
 
 // updating booking by id
 module.exports.updateBookingById = catchAsync(async (req, res, next) => {
-  console.log(req.body);
   var booking = await Booking.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
     runValidators: true

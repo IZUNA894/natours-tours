@@ -9,29 +9,29 @@ module.exports = class Email {
     this.firstName = user.name.split(" ")[0];
     this.from = `Tony ${process.env.EMAIL_FROM}`;
   }
-
   newTransport() {
     //1. create transport
-    if (process.env.ENVIRONMENT === "production")
+    if (process.env.ENVIRONMENT === "production") {
       //sendgrid service dont need transport
-      console.log("email here");
-    return nodemailer.createTransport({
-      service: "SendGrid",
-      auth: {
-        user: process.env.SENDGRID_USERNAME,
-        pass: process.env.SENDGRID_KEY
-      }
-    });
-    //else using a transporter
+      return nodemailer.createTransport({
+        service: "SendGrid",
+        auth: {
+          user: process.env.SENDGRID_USERNAME,
+          pass: process.env.SENDGRID_KEY
+        }
+      });
+    } else {
+      //else using a transporter
 
-    return nodemailer.createTransport({
-      host: process.env.EMAIL_HOST,
-      port: process.env.EMAIL_PORT,
-      auth: {
-        user: process.env.EMAIL_USERNAME,
-        pass: process.env.EMAIL_PASSWORD
-      }
-    });
+      return nodemailer.createTransport({
+        host: process.env.EMAIL_HOST,
+        port: process.env.EMAIL_PORT,
+        auth: {
+          user: process.env.EMAIL_USERNAME,
+          pass: process.env.EMAIL_PASSWORD
+        }
+      });
+    }
   }
 
   //sending actual mail

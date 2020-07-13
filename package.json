@@ -10,7 +10,7 @@
     "prod": "./node_modules/.bin/env-cmd -f ./config/prod.env nodemon server.js",
     "watch:js": "parcel watch ./public/js/index.js --out-dir ./public/js --out-file bundle.js",
     "build:js": "parcel watch ./public/js/index.js --out-dir ./public/js --out-file bundle.js",
-    "debug": "ndb server.js"
+    "debug": "./node_modules/.bin/env-cmd -f ./config/dev.env ndb server.js"
   },
   "author": "",
   "license": "ISC",

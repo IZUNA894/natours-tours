@@ -2,11 +2,13 @@
 import "@babel/polyfill";
 import { displayMap } from "./mapbox";
 import { login, logout } from "./login";
+import { signup } from "./signup";
 import { updateSettings } from "./updateSettings";
 import { getBooking } from "./stripe.js";
 // DOM ELEMENTS
 const mapBox = document.getElementById("map");
-const loginForm = document.querySelector(".form--login");
+const loginForm = document.querySelector("#loginForm");
+const signupForm = document.querySelector("#signupForm");
 const logOutBtn = document.querySelector(".nav__el--logout");
 const userDataForm = document.querySelector(".form-user-data");
 const userPasswordForm = document.querySelector(".form-user-password");
@@ -24,6 +26,18 @@ if (loginForm)
     const email = document.getElementById("email").value;
     const password = document.getElementById("password").value;
     login(email, password);
+  });
+
+//for sign up form
+if (signupForm)
+  signupForm.addEventListener("submit", e => {
+    e.preventDefault();
+    const name = document.getElementById("name").value;
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+    const confirmPassword = document.getElementById("confirmPassword").value;
+
+    signup(name, email, password, confirmPassword);
   });
 
 if (logOutBtn) logOutBtn.addEventListener("click", logout);
@@ -66,7 +80,6 @@ if (userPasswordForm)
   });
 
 if (bookTour) {
-  console.log(bookTour);
   bookTour.addEventListener("click", e => {
     var tourId = e.target.dataset.tourId;
     getBooking(tourId);

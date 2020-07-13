@@ -7,6 +7,7 @@ const AppError = require("../utils/appError");
 const crypto = require("crypto");
 const Email = require("./../utils/email");
 //creaitng a user
+
 module.exports.createUser = catchAsync(async (req, res, next) => {
   let user = new User(req.body);
   user = await user.save();
@@ -15,8 +16,7 @@ module.exports.createUser = catchAsync(async (req, res, next) => {
   });
 
   const url = `${req.protocol}://${req.hostname}/me`;
-  console.log(url);
-  await new Email(user, url).sendWelcome();
+  new Email(user, url).sendWelcome();
 
   res.cookie("jwt", token, {
     expires: new Date(
@@ -28,7 +28,7 @@ module.exports.createUser = catchAsync(async (req, res, next) => {
   //! if deploying to heroku ,use this for setting cookie.secure
   //// if( req.secure === "true" || req.headers['x-forwarded-proto] === 'https') then set it true
   res.status(201).json({
-    status: "succes",
+    status: "success",
     token,
     data: user
   });
@@ -229,7 +229,6 @@ module.exports.updatePassword = catchAsync(async (req, res, next) => {
   let user = await User.findById(id).select("+password");
 
   //2. check if given password is correct
-  console.log(currentPassword);
   if (!(await user.checkPassword(currentPassword, user.password)))
     return next(new AppError("incorrect password", 401));
 

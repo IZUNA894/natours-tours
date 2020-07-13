@@ -32,6 +32,11 @@ module.exports.login = catchAsync(async (req, res, next) => {
   res.status(200).render("login");
 });
 
+//signup
+module.exports.signup = catchAsync(async (req, res, next) => {
+  res.status(200).render("signup");
+});
+
 //about me
 module.exports.getMe = catchAsync(async (req, res, next) => {
   res.status(200).render("account", {
