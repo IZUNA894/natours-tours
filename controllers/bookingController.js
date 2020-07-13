@@ -16,7 +16,7 @@ module.exports.getCheckoutSession = catchAsync(async (req, res, next) => {
   const Stripe = await stripe.checkout.sessions.create({
     payment_method_types: ["card"],
     // success_url: `${req.protocol}://${req.hostname}:3000/?tourId=${tour._id}&userId=${req.user.id}&price=${tour.price}`,  this function is used in developement only...
-    success_url: `${req.protocol}://${req.hostname}:3000/`,
+    success_url: `${req.protocol}://${req.hostname}`,
     cancel_url: `${req.protocol}://${req.hostname}/tour/${tour.slug}`,
     customer_email: req.user.email,
     client_reference_id: req.params.tourId,
@@ -41,7 +41,7 @@ module.exports.getCheckoutSession = catchAsync(async (req, res, next) => {
 
 //creating booking check out ,called by below function only
 const createBookingCheckout = async session => {
-  console.log("createBooking called");
+  console.log("createBooking called", session);
   const tour = session.client_reference_id;
   const user = (await User.findOne({ email: session.customer_email })).id;
   const price = session.line_items[0].amount / 100;
@@ -51,7 +51,6 @@ const createBookingCheckout = async session => {
 module.exports.webhookCheckout = (req, res, next) => {
   const signature = req.headers["stripe-signature"];
   console.log("function called");
-  console.log(signature);
   if (!signature) return next();
   let event;
   try {
@@ -63,9 +62,7 @@ module.exports.webhookCheckout = (req, res, next) => {
   } catch (err) {
     return res.status(400).send(`Webhook error :${err.message}`);
   }
-  console.log("event ", event.type);
   if (event.type === "checkout.session.completed") {
-    console.log("hello");
     createBookingCheckout(event.data.object);
   }
 
