@@ -13,6 +13,8 @@ const logOutBtn = document.querySelector(".nav__el--logout");
 const userDataForm = document.querySelector(".form-user-data");
 const userPasswordForm = document.querySelector(".form-user-password");
 const bookTour = document.querySelector("#book-tour");
+const signupBtn = document.querySelector("#signupBtn");
+const loginBtn = document.querySelector("#loginBtn");
 
 // DELEGATION
 if (mapBox) {
@@ -23,6 +25,7 @@ if (mapBox) {
 if (loginForm)
   loginForm.addEventListener("submit", e => {
     e.preventDefault();
+    loginBtn.innerHTML = "Processing...";
     const email = document.getElementById("email").value;
     const password = document.getElementById("password").value;
     login(email, password);
@@ -32,6 +35,7 @@ if (loginForm)
 if (signupForm)
   signupForm.addEventListener("submit", e => {
     e.preventDefault();
+    signupBtn.innerHTML = "Processing...";
     const name = document.getElementById("name").value;
     const email = document.getElementById("email").value;
     const password = document.getElementById("password").value;
@@ -82,6 +86,7 @@ if (userPasswordForm)
 if (bookTour) {
   bookTour.addEventListener("click", e => {
     var tourId = e.target.dataset.tourId;
+    bookTour.innerHTML = "Processing...";
     getBooking(tourId);
   });
 }

@@ -68734,7 +68734,9 @@ var signupForm = document.querySelector("#signupForm");
 var logOutBtn = document.querySelector(".nav__el--logout");
 var userDataForm = document.querySelector(".form-user-data");
 var userPasswordForm = document.querySelector(".form-user-password");
-var bookTour = document.querySelector("#book-tour"); // DELEGATION
+var bookTour = document.querySelector("#book-tour");
+var signupBtn = document.querySelector("#signupBtn");
+var loginBtn = document.querySelector("#loginBtn"); // DELEGATION
 
 if (mapBox) {
   var locations = JSON.parse(mapBox.dataset.locations);
@@ -68743,6 +68745,7 @@ if (mapBox) {
 
 if (loginForm) loginForm.addEventListener("submit", function (e) {
   e.preventDefault();
+  loginBtn.innerHTML = "Processing...";
   var email = document.getElementById("email").value;
   var password = document.getElementById("password").value;
   (0, _login.login)(email, password);
@@ -68750,6 +68753,7 @@ if (loginForm) loginForm.addEventListener("submit", function (e) {
 
 if (signupForm) signupForm.addEventListener("submit", function (e) {
   e.preventDefault();
+  signupBtn.innerHTML = "Processing...";
   var name = document.getElementById("name").value;
   var email = document.getElementById("email").value;
   var password = document.getElementById("password").value;
@@ -68811,6 +68815,7 @@ if (userPasswordForm) userPasswordForm.addEventListener("submit", /*#__PURE__*/f
 if (bookTour) {
   bookTour.addEventListener("click", function (e) {
     var tourId = e.target.dataset.tourId;
+    bookTour.innerHTML = "Processing...";
     (0, _stripe.getBooking)(tourId);
   });
 }
@@ -68842,7 +68847,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "52898" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "58574" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
